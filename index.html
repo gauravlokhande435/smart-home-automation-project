@@ -6,7 +6,295 @@
 <title>IoT Home Automation</title>
 
 <style>
+/* FORCE WHITE TITLE (always white in both modes) */
+/* FORCE WHITE TITLE (OVERRIDES LIGHT MODE) */
+h2.force-white{
+  color:#ffffff !important;
+  text-shadow:
+    0 0 12px rgba(0,0,0,0.9),
+    0 0 25px rgba(0,0,0,0.7),
+    0 6px 18px rgba(0,0,0,0.8);
+}
+/* ===== GLOBAL ===== */
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+  transition:
+    background 0.4s ease,
+    color 0.4s ease,
+    box-shadow 0.4s ease,
+    border 0.4s ease,
+    transform 0.25s ease;
+}
 
+body{
+  background:url("wallpaper.png") no-repeat center center fixed;
+  background-size:cover;
+  color:#fff;
+  overflow-x:hidden;
+}
+
+/* DARK OVERLAY */
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.6);
+  backdrop-filter:blur(6px);
+  z-index:-1;
+}
+
+/* ===== LIGHT MODE ===== */
+body.light{
+  background:#f5f5f5;
+  color:#111;
+}
+
+/* Remove dark overlay in light mode */
+body.light::before{
+  background:rgba(0,0,0,0);
+  backdrop-filter:none;
+}
+
+/* Fix all text in light mode */
+body.light h1,
+body.light h3,
+body.light p,
+body.light li,
+body.light span,
+body.light button{
+  color:#111 !important;
+}
+
+/* ===== SECTION ===== */
+section{
+  padding:18px 10px;
+  display:flex;
+  justify-content:center;
+}
+
+/* ===== GLASS CARD ===== */
+/* ===== GLASS CARD (DARK MODE DEFAULT) ===== */
+.glass-card{
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  transition: all 0.4s ease;
+}
+
+/* ===== GLASS CARD (LIGHT MODE) ===== */
+body.light .glass-card{
+  background: rgba(255,255,255,0.25); /* MORE TRANSPARENT */
+  border: 1px solid rgba(255,255,255,0.5);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+/* ===== IMAGE CARD ===== */
+.image-card{
+  background:#000;
+  border-radius:26px;
+  padding:20px;
+  width:100%;
+  max-width:750px;
+  text-align:center;
+  box-shadow:0 20px 50px rgba(0,0,0,0.8);
+  margin:auto;
+}
+
+/* ===== HEADINGS ===== */
+h1{
+  font-size:2.2rem;
+  margin-bottom:8px;
+}
+
+h2{
+  margin-bottom:12px;
+  font-size:1.5rem;
+}
+
+p{
+  line-height:1.6;
+  color:#ddd;
+}
+
+/* Fix paragraph color in light mode */
+body.light p{
+  color:#222;
+}
+
+/* ===== IMAGE ===== */
+img{
+  width:300px;
+  display:block;
+  margin:12px auto;
+  border-radius:20px;
+}
+
+/* ===== LIGHT EFFECT ===== */
+.light-on{
+  box-shadow:
+    0 0 35px rgba(255,255,255,0.9),
+    0 0 70px rgba(255,255,255,0.6),
+    0 0 110px rgba(255,255,200,0.5);
+}
+
+.light-off{
+  box-shadow:0 0 10px rgba(255,255,255,0.2);
+}
+
+/* ===== BUTTONS ===== */
+button{
+  padding:10px 24px;
+  margin:8px;
+  border-radius:40px;
+  border:1px solid rgba(255,255,255,0.4);
+  background:rgba(255,255,255,0.1);
+  color:#fff;
+  font-size:14px;
+  cursor:pointer;
+}
+
+button:hover{
+  background:rgba(255,255,255,0.2);
+}
+
+/* ACTIVE GLOW */
+.button-active{
+  transform:scale(1.08);
+  background:rgba(255,255,255,0.18);
+  box-shadow:
+    0 0 15px rgba(255,255,255,0.7),
+    0 0 30px rgba(255,255,255,0.5),
+    0 8px 20px rgba(0,0,0,0.4);
+}
+
+/* Buttons in light mode */
+body.light button{
+  background:rgba(0,0,0,0.08);
+  border:1px solid rgba(0,0,0,0.3);
+  color:#111;
+}
+
+body.light .button-active{
+  box-shadow:
+    0 0 20px rgba(0,0,0,0.8),
+    0 10px 30px rgba(0,0,0,0.5);
+}
+
+/* Theme Button */
+.theme-btn{
+  position:fixed;
+  top:12px;              /* closer to top */
+  right:12px;            /* closer to corner */
+  width:42px;            /* smaller size */
+  height:42px;
+  border-radius:50%;
+  border:none;
+  background:rgba(255,255,255,0.12);
+  backdrop-filter:blur(10px);
+  color:#fff;
+  font-size:18px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  z-index:1000;
+  box-shadow:0 6px 18px rgba(0,0,0,0.5);
+}
+
+.theme-btn:hover{
+  transform:scale(1.08);
+}
+
+body.light .theme-btn{
+  background:rgba(0,0,0,0.15);
+  color:#111;
+  box-shadow:0 6px 18px rgba(0,0,0,0.4);
+}
+
+video{
+  width:100%;
+  border-radius:18px;
+  margin-top:10px;
+}
+
+pre{
+  background:#111;
+  padding:18px;
+  border-radius:15px;
+  color:#ffffff;
+  font-size:13px;
+  overflow:auto;
+}
+
+.version{
+  font-size:13px;
+  opacity:0.7;
+}
+
+
+
+/* Smooth transition */
+body{
+  transition: background 0.4s ease, color 0.4s ease;
+}
+body.light {
+  color: #111;
+}
+
+body.light h1,
+body.light h2,
+body.light h3,
+body.light p,
+body.light li,
+body.light span {
+  color: #111;
+}
+/* Light Mode Variables */
+body.light{
+  background:#f5f5f5;
+  color:#111;
+}
+
+/* Glass Card Light Mode */
+body.light .glass{
+  background:rgba(255,255,255,0.7);
+  border:1px solid rgba(0,0,0,0.1);
+  backdrop-filter:blur(20px);
+}
+
+/* Theme Button Style */
+.theme-btn{
+  position:fixed;
+  top:20px;
+  right:20px;
+  padding:10px 15px;
+  border:none;
+  border-radius:20px;
+  background:rgba(255,255,255,0.15);
+  backdrop-filter:blur(10px);
+  color:#fff;
+  cursor:pointer;
+  font-size:18px;
+  transition:0.3s ease;
+  z-index:999;
+}
+
+.theme-btn:hover{
+  transform:scale(1.1);
+}
+
+body.light .theme-btn{
+  background:rgba(0,0,0,0.1);
+  color:#111;
+}
 /* ===== GLOBAL ===== */
 *{
   margin:0;
@@ -17,6 +305,7 @@
 
 body{
   background:url("wallpaper.png") no-repeat center center fixed;
+  
   background-size:cover;
   color:#fff;
   overflow-x:hidden;
@@ -40,9 +329,9 @@ section{
 
 /* ===== GLASS CARD ===== */
 .glass{
-  background:rgba(255,255,255,0.08);
+  background:rgba(255,255,255,0.05);
   border-radius:26px;
-  backdrop-filter:blur(20px);
+  backdrop-filter:blur(12px);
   border:1px solid rgba(255,255,255,0.2);
   box-shadow:0 15px 35px rgba(0,0,0,0.6);
   padding:22px;
@@ -103,6 +392,7 @@ img{
 
 /* ===== BUTTON STYLE ===== */
 button{
+
   padding:10px 24px;
   margin:8px;
   border-radius:40px;
@@ -155,7 +445,7 @@ pre{
 </head>
 
 <body>
-
+<button id="themeToggle" class="theme-btn">🌙</button>
 <!-- 1 TITLE -->
 <section>
 <div class="glass">
@@ -177,7 +467,8 @@ pre{
 <!-- 3 IMAGE -->
 <section>
 <div class="image-card">
-<h2>Home Automation Model</h2>
+<h2 class="force-white">Home Automation Model</h2>
+
 <img src="image.png" id="lightImage" class="light-off">
 </div>
 </section>
@@ -237,7 +528,7 @@ When a user presses a button on the interface, a command is sent to the microcon
     <p>• Press All Off to turn off all lights.</p>
   </div>
 </section>
-  <!-- SOURCE CODE SECTION -->
+<!-- SOURCE CODE SECTION -->
 <section>
   <div class="glass">
     <h2>Source Code</h2>
@@ -475,7 +766,18 @@ function allOff(){
 }
 
 </script>
+<script>
+const toggle = document.getElementById("themeToggle");
 
+toggle.addEventListener("click", () => {
+  document.body.classList.toggle("light");
+
+  if(document.body.classList.contains("light")){
+    toggle.textContent = "☀️";
+  } else {
+    toggle.textContent = "🌙";
+  }
+});
+</script>
 </body>
-
 </html>
