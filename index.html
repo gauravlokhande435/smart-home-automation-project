@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IoT Home Automation</title>
+
+<style>
+
+/* ===== GLOBAL ===== */
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+}
+
+body{
+  background:url("wallpaper.png") no-repeat center center fixed;
+  background-size:cover;
+  color:#fff;
+  overflow-x:hidden;
+}
+
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.6);
+  backdrop-filter:blur(6px);
+  z-index:-1;
+}
+
+/* ===== SECTION ===== */
+section{
+  padding:18px 10px;
+  display:flex;
+  justify-content:center;
+}
+
+/* ===== GLASS CARD ===== */
+.glass{
+  background:rgba(255,255,255,0.08);
+  border-radius:26px;
+  backdrop-filter:blur(20px);
+  border:1px solid rgba(255,255,255,0.2);
+  box-shadow:0 15px 35px rgba(0,0,0,0.6);
+  padding:22px;
+  width:100%;
+  max-width:900px;
+  text-align:center;
+  margin:auto;
+}
+
+/* ===== IMAGE CARD ===== */
+.image-card{
+  background:#000;
+  border-radius:26px;
+  padding:20px;
+  width:100%;
+  max-width:750px;
+  text-align:center;
+  box-shadow:0 20px 50px rgba(0,0,0,0.8);
+  margin:auto;
+}
+
+/* Headings */
+h1{
+  font-size:2.2rem;
+  margin-bottom:8px;
+}
+
+h2{
+  margin-bottom:12px;
+  font-size:1.5rem;
+}
+
+p{
+  line-height:1.6;
+  color:#ddd;
+}
+
+/* ===== IMAGE ===== */
+img{
+  width:300px;
+  display:block;
+  margin:12px auto;
+  border-radius:20px;
+  transition:0.4s ease;
+}
+
+/* ===== REALISTIC LIGHT ===== */
+.light-on{
+  box-shadow:
+    0 0 35px rgba(255,255,255,0.9),
+    0 0 70px rgba(255,255,255,0.6),
+    0 0 110px rgba(255,255,200,0.5);
+}
+
+.light-off{
+  box-shadow:0 0 10px rgba(255,255,255,0.2);
+}
+
+/* ===== BUTTON STYLE ===== */
+button{
+  padding:10px 24px;
+  margin:8px;
+  border-radius:40px;
+  border:1px solid rgba(255,255,255,0.4);
+  background:rgba(255,255,255,0.1);
+  color:#fff;
+  font-size:14px;
+  cursor:pointer;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    background 0.25s ease;
+}
+
+button:hover{
+  background:rgba(255,255,255,0.2);
+}
+
+/* ===== ACTIVE GLOW ===== */
+.button-active{
+  transform:scale(1.08);
+  background:rgba(255,255,255,0.18);
+  box-shadow:
+    0 0 15px rgba(255,255,255,0.7),
+    0 0 30px rgba(255,255,255,0.5),
+    0 8px 20px rgba(0,0,0,0.4);
+}
+
+video{
+  width:100%;
+  border-radius:18px;
+  margin-top:10px;
+}
+
+pre{
+  background:#111;
+  padding:18px;
+  border-radius:15px;
+  color:#ffffff;
+  font-size:13px;
+  overflow:auto;
+}
+
+.version{
+  font-size:13px;
+  opacity:0.7;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- 1 TITLE -->
+<section>
+<div class="glass">
+<h1>Smart IoT Home Automation</h1>
+<p>WiFi Enabled • Real-Time Control • Energy Efficient</p>
+</div>
+</section>
+
+<!-- 2 DEMO -->
+<section>
+<div class="glass">
+<h2>Project Demo</h2>
+<video controls>
+<source src="demo.mp4" type="video/mp4">
+</video>
+</div>
+</section>
+
+<!-- 3 IMAGE -->
+<section>
+<div class="image-card">
+<h2>Home Automation Model</h2>
+<img src="image.png" id="lightImage" class="light-off">
+</div>
+</section>
+
+<!-- 4 BUTTONS -->
+<section>
+<div class="glass">
+<h2>Light Control</h2>
+
+<button class="top-btn" onclick="toggleLight(1)">Light 1</button>
+<button class="left-btn" onclick="toggleLight(2)">Light 2</button>
+<button class="center-btn" onclick="allOn()">All On</button>
+<button class="right-btn" onclick="allOff()">All Off</button>
+
+</div>
+</section>
+
+<!-- 5 INTRODUCTION -->
+<section>
+<div class="glass">
+<h2>Introduction</h2>
+<p>
+The Smart IoT Home Automation system is designed to provide convenient and efficient control of household electrical appliances through a web-based interface. By integrating a microcontroller with WiFi communication and relay modules, the system allows users to remotely switch devices ON or OFF in real time. This project demonstrates how IoT technology enhances modern living by improving accessibility, automation, and energy management.
+</p>
+</div>
+</section>
+
+<!-- 6 WORKING PRINCIPLE -->
+<section>
+<div class="glass">
+<h2>Working Principle</h2>
+<p>
+When a user presses a button on the interface, a command is sent to the microcontroller via WiFi. The controller processes the signal and activates the corresponding relay module. The relay switches the connected appliance ON or OFF. Pressing the same button again deactivates the relay. This ensures safe, reliable, and real-time control of home appliances.
+</p>
+</div>
+</section>
+
+<!-- 7 FEATURES -->
+<section>
+<div class="glass">
+<h2>Features</h2>
+<p>• Remote appliance control</p>
+<p>• Real-time switching</p>
+<p>• Energy efficient</p>
+<p>• Web-based interface</p>
+<p>• Expandable system</p>
+</div>
+</section>
+<!-- DEMO STEPS SECTION -->
+<section>
+  <div class="glass">
+    <h2>Demo Steps</h2>
+    <p>• Power on the system and connect to WiFi.</p>
+    <p>• Open the web interface in a browser.</p>
+    <p>• Use Light 1 and Light 2 to control individually.</p>
+    <p>• Press All On to turn on all lights.</p>
+    <p>• Press All Off to turn off all lights.</p>
+  </div>
+</section>
+<!-- 8 CONCLUSION -->
+<section>
+<div class="glass">
+<h2>Conclusion</h2>
+<p>
+This project successfully demonstrates the implementation of IoT-based home automation using a microcontroller and relay modules. It offers convenient remote control, improved energy efficiency, and a scalable design suitable for modern smart home systems.
+</p>
+</div>
+</section>
+
+<!-- 9 VERSION -->
+<section>
+<div class="glass">
+<h2>Version</h2>
+<p class="version">Version 1.0 • Academic Demonstration</p>
+</div>
+</section>
+
+<script>
+
+const img = document.getElementById("lightImage");
+const clickSound = new Audio("click.mp3");
+
+const btn1 = document.querySelector(".top-btn");
+const btn2 = document.querySelector(".left-btn");
+const btnAllOn = document.querySelector(".center-btn");
+
+let light1 = false;
+let light2 = false;
+let allState = false;
+
+function toggleLight(num){
+  clickSound.currentTime = 0;
+  clickSound.play();
+
+  if(num === 1){
+    light1 = !light1;
+    btn1.classList.toggle("button-active");
+    img.src = light1 ? "image1.png" : "image.png";
+  }
+
+  if(num === 2){
+    light2 = !light2;
+    btn2.classList.toggle("button-active");
+    img.src = light2 ? "image2.png" : "image.png";
+  }
+
+  img.classList.toggle("light-on", light1 || light2);
+  img.classList.toggle("light-off", !(light1 || light2));
+
+  allState = false;
+  btnAllOn.classList.remove("button-active");
+}
+
+function allOn(){
+  clickSound.currentTime = 0;
+  clickSound.play();
+
+  allState = !allState;
+  btnAllOn.classList.toggle("button-active");
+
+  if(allState){
+    img.src = "image3.png";
+    img.classList.add("light-on");
+    img.classList.remove("light-off");
+    light1 = true;
+    light2 = true;
+    btn1.classList.add("button-active");
+    btn2.classList.add("button-active");
+  } else {
+    allOff();
+  }
+}
+
+function allOff(){
+  img.src = "image.png";
+  img.classList.remove("light-on");
+  img.classList.add("light-off");
+  light1 = false;
+  light2 = false;
+  allState = false;
+  btn1.classList.remove("button-active");
+  btn2.classList.remove("button-active");
+  btnAllOn.classList.remove("button-active");
+}
+
+</script>
+
+</body>
+</html>
