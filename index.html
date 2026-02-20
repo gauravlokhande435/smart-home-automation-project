@@ -237,6 +237,157 @@ When a user presses a button on the interface, a command is sent to the microcon
     <p>• Press All Off to turn off all lights.</p>
   </div>
 </section>
+  <!-- SOURCE CODE SECTION -->
+<section>
+  <div class="glass">
+    <h2>Source Code</h2>
+
+    <pre style="
+      background:#000;
+      color:#fff;
+      padding:20px;
+      border-radius:20px;
+      overflow-x:auto;
+      text-align:left;
+      font-size:13px;
+      line-height:1.6;
+      box-shadow:0 0 20px rgba(255,255,255,0.15);
+    "><code>
+
+#include &lt;Arduino.h&gt;
+#include &lt;ESP8266WiFi.h&gt;
+#include &lt;SinricPro.h&gt;
+#include &lt;SinricProSwitch.h&gt;
+
+/* ========= USER CONFIG ========= */
+
+#define WIFI_SSID     "TEST_ESP"
+#define WIFI_PASS     "12345678"
+
+#define APP_KEY       "47c4524f-eeb0-4d86-947e-66d05b8bf5f8"
+#define APP_SECRET    "6c09be76-fde1-4e66-a15f-ea0c410fbf8b-18bb5a2c-2d21-4a36-a099-771b5cfaac2b"
+
+#define DEVICE1_ID    "6973652040cb098d90c4da57"
+#define DEVICE2_ID    "697363d57e0883bc2690cd78"
+#define DEVICE3_ID    "6973628740cb098d90c4d850"
+#define DEVICE4_ID    "xxxxxxxxxxxxxxxxxxxxxxxx"
+
+/* ========= PIN CONFIG ========= */
+
+#define RELAY1 5
+#define RELAY2 4
+#define RELAY3 14
+#define RELAY4 12
+
+#define SW1 13
+#define SW2 16
+#define SW3 2
+#define SW4 15
+
+#define WIFI_LED 16
+#define DEBOUNCE_MS 250
+
+struct Device {
+  const char* id;
+  uint8_t relay;
+  uint8_t sw;
+  bool lastState;
+  unsigned long lastChange;
+};
+
+Device devices[] = {
+  { DEVICE1_ID, RELAY1, SW1, HIGH, 0 },
+  { DEVICE2_ID, RELAY2, SW2, HIGH, 0 },
+  { DEVICE3_ID, RELAY3, SW3, HIGH, 0 },
+  { DEVICE4_ID, RELAY4, SW4, HIGH, 0 }
+};
+
+const uint8_t DEVICE_COUNT = sizeof(devices) / sizeof(devices[0]);
+
+bool onPowerState(const String &deviceId, bool &state) {
+  for (uint8_t i = 0; i &lt; DEVICE_COUNT; i++) {
+    if (deviceId == devices[i].id) {
+      digitalWrite(devices[i].relay, state ? LOW : HIGH);
+      return true;
+    }
+  }
+  return false;
+}
+
+void setupRelays() {
+  for (uint8_t i = 0; i &lt; DEVICE_COUNT; i++) {
+    pinMode(devices[i].relay, OUTPUT);
+    digitalWrite(devices[i].relay, HIGH);
+  }
+}
+
+void setupSwitches() {
+  for (uint8_t i = 0; i &lt; DEVICE_COUNT; i++) {
+    pinMode(devices[i].sw, INPUT_PULLUP);
+  }
+}
+
+void setupWiFi() {
+  WiFi.begin(WIFI_SSID, WIFI_PASS);
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(300);
+  }
+  digitalWrite(WIFI_LED, LOW);
+}
+
+void setupSinric() {
+  for (uint8_t i = 0; i &lt; DEVICE_COUNT; i++) {
+    SinricProSwitch &sw = SinricPro[devices[i].id];
+    sw.onPowerState(onPowerState);
+  }
+  SinricPro.begin(APP_KEY, APP_SECRET);
+  SinricPro.restoreDeviceStates(true);
+}
+
+void handleSwitches() {
+  unsigned long now = millis();
+
+  for (uint8_t i = 0; i &lt; DEVICE_COUNT; i++) {
+    bool current = digitalRead(devices[i].sw);
+
+    if (current != devices[i].lastState &&
+        (now - devices[i].lastChange) &gt; DEBOUNCE_MS) {
+
+      devices[i].lastChange = now;
+      devices[i].lastState = current;
+
+      if (current == LOW) {
+        bool relayState = !digitalRead(devices[i].relay);
+        digitalWrite(devices[i].relay, relayState);
+
+        SinricProSwitch &sw = SinricPro[devices[i].id];
+        sw.sendPowerStateEvent(!relayState);
+      }
+    }
+  }
+}
+
+void setup() {
+  Serial.begin(9600);
+
+  pinMode(WIFI_LED, OUTPUT);
+  digitalWrite(WIFI_LED, HIGH);
+
+  setupRelays();
+  setupSwitches();
+  setupWiFi();
+  setupSinric();
+}
+
+void loop() {
+  SinricPro.handle();
+  handleSwitches();
+}
+
+    </code></pre>
+
+  </div>
+</section>
 <!-- 8 CONCLUSION -->
 <section>
 <div class="glass">
@@ -326,4 +477,5 @@ function allOff(){
 </script>
 
 </body>
+
 </html>
